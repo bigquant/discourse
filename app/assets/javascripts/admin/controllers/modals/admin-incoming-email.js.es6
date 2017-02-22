@@ -12,6 +12,10 @@ export default Ember.Controller.extend(ModalFunctionality, {
 
   load(id) {
     return IncomingEmail.find(id).then(result => this.set("model", result));
+  },
+
+  load_from_bounced(id) {
+    return IncomingEmail.find_by_bounced(id).then(result => this.set("model", result));
   }
 
 });
