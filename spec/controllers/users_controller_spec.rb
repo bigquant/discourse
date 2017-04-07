@@ -100,7 +100,7 @@ describe UsersController do
     it "redirects to their profile when logged in" do
       user = log_in
       get :user_preferences_redirect
-      expect(response).to redirect_to("/users/#{user.username_lower}/preferences")
+      expect(response).to redirect_to("/u/#{user.username_lower}/preferences")
     end
   end
 
@@ -188,6 +188,27 @@ describe UsersController do
         end
       end
 
+    end
+  end
+
+  describe '#perform_account_activation' do
+    describe 'when cookies contains a destination URL' do
+      let(:token) { 'asdadwewq' }
+      let(:user) { Fabricate(:user) }
+
+      before do
+        UsersController.any_instance.stubs(:honeypot_or_challenge_fails?).returns(false)
+        EmailToken.expects(:confirm).with(token).returns(user)
+      end
+
+      it 'should redirect to the URL' do
+        destination_url = 'http://thisisasite.com/somepath'
+        request.cookies[:destination_url] = destination_url
+
+        put :perform_account_activation, token: token
+
+        expect(response).to redirect_to(destination_url)
+      end
     end
   end
 
@@ -1403,10 +1424,60 @@ describe UsersController do
     context 'for an existing user' do
       let(:user) { Fabricate(:user, active: false) }
 
+      context 'for an activated account with email confirmed' do
+        it 'fails' do
+          active_user = Fabricate(:user, active: true)
+          email_token = active_user.email_tokens.create(email: active_user.email).token
+          EmailToken.confirm(email_token)
+          session[SessionController::ACTIVATE_USER_KEY] = active_user.id
+          xhr :post, :send_activation_email, username: active_user.username
+
+          expect(response.status).to eq(409)
+
+          expect(JSON.parse(response.body)['errors']).to include(I18n.t(
+            'activation.activated'
+          ))
+
+          expect(session[SessionController::ACTIVATE_USER_KEY]).to eq(nil)
+        end
+      end
+
+      context 'for an activated account with unconfirmed email' do
+        it 'should send an email' do
+          unconfirmed_email_user = Fabricate(:user, active: true)
+          unconfirmed_email_user.email_tokens.create(email: unconfirmed_email_user.email)
+          session[SessionController::ACTIVATE_USER_KEY] = unconfirmed_email_user.id
+          Jobs.expects(:enqueue).with(:critical_user_email, has_entries(type: :signup))
+          xhr :post, :send_activation_email, username: unconfirmed_email_user.username
+
+          expect(response.status).to eq(200)
+
+          expect(session[SessionController::ACTIVATE_USER_KEY]).to eq(nil)
+        end
+      end
+
+      describe 'when user does not have a valid session' do
+        it 'should not be valid' do
+          user = Fabricate(:user)
+          xhr :post, :send_activation_email, username: user.username
+          expect(response.status).to eq(403)
+        end
+
+        it 'should allow staff regardless' do
+          log_in :admin
+          user = Fabricate(:user, active: false)
+          xhr :post, :send_activation_email, username: user.username
+          expect(response.status).to eq(200)
+        end
+      end
+
       context 'with a valid email_token' do
         it 'should send the activation email' do
+          session[SessionController::ACTIVATE_USER_KEY] = user.id
           Jobs.expects(:enqueue).with(:critical_user_email, has_entries(type: :signup))
           xhr :post, :send_activation_email, username: user.username
+
+          expect(session[SessionController::ACTIVATE_USER_KEY]).to eq(nil)
         end
       end
 
@@ -1418,13 +1489,17 @@ describe UsersController do
 
         it 'should generate a new token' do
           expect {
+            session[SessionController::ACTIVATE_USER_KEY] = user.id
             xhr :post, :send_activation_email, username: user.username
           }.to change{ user.email_tokens(true).count }.by(1)
         end
 
         it 'should send an email' do
+          session[SessionController::ACTIVATE_USER_KEY] = user.id
           Jobs.expects(:enqueue).with(:critical_user_email, has_entries(type: :signup))
           xhr :post, :send_activation_email, username: user.username
+
+          expect(session[SessionController::ACTIVATE_USER_KEY]).to eq(nil)
         end
       end
     end
@@ -1729,6 +1804,144 @@ describe UsersController do
 
       expect(json["user_summary"]["topic_count"]).to eq(1)
       expect(json["user_summary"]["post_count"]).to eq(1)
+    end
+  end
+
+
+  describe ".confirm_admin" do
+    it "fails without a valid token" do
+      expect {
+        get :confirm_admin, token: 'invalid-token'
+      }.to raise_error(ActionController::UrlGenerationError)
+    end
+
+    it "fails with a missing token" do
+      get :confirm_admin, token: 'a0a0a0a0a0'
+      expect(response).to_not be_success
+    end
+
+    it "succeeds with a valid code as anonymous" do
+      user = Fabricate(:user)
+      ac = AdminConfirmation.new(user, Fabricate(:admin))
+      ac.create_confirmation
+      get :confirm_admin, token: ac.token
+      expect(response).to be_success
+
+      user.reload
+      expect(user.admin?).to eq(false)
+    end
+
+    it "succeeds with a valid code when logged in as that user" do
+      admin = log_in(:admin)
+      user = Fabricate(:user)
+
+      ac = AdminConfirmation.new(user, admin)
+      ac.create_confirmation
+      get :confirm_admin, token: ac.token
+      expect(response).to be_success
+
+      user.reload
+      expect(user.admin?).to eq(false)
+    end
+
+    it "fails if you're logged in as a different account" do
+      log_in(:admin)
+      user = Fabricate(:user)
+
+      ac = AdminConfirmation.new(user, Fabricate(:admin))
+      ac.create_confirmation
+      get :confirm_admin, token: ac.token
+      expect(response).to_not be_success
+
+      user.reload
+      expect(user.admin?).to eq(false)
+    end
+
+    describe "post" do
+      it "gives the user admin access when POSTed" do
+        user = Fabricate(:user)
+        ac = AdminConfirmation.new(user, Fabricate(:admin))
+        ac.create_confirmation
+        post :confirm_admin, token: ac.token
+        expect(response).to be_success
+
+        user.reload
+        expect(user.admin?).to eq(true)
+      end
+    end
+
+  end
+
+
+  describe '.update_activation_email' do
+
+    it "raises an error with an invalid username" do
+      xhr :put, :update_activation_email, {
+        username: 'eviltrout',
+        password: 'invalid-password',
+        email: 'updatedemail@example.com'
+      }
+      expect(response).to_not be_success
+    end
+
+    it "raises an error with an invalid password" do
+      xhr :put, :update_activation_email, {
+        username: Fabricate(:inactive_user).username,
+        password: 'invalid-password',
+        email: 'updatedemail@example.com'
+      }
+      expect(response).to_not be_success
+    end
+
+    it "raises an error for an active user" do
+      xhr :put, :update_activation_email, {
+        username: Fabricate(:walter_white).username,
+        password: 'letscook',
+        email: 'updatedemail@example.com'
+      }
+      expect(response).to_not be_success
+    end
+
+    it "raises an error when logged in" do
+      log_in(:moderator)
+
+      xhr :put, :update_activation_email, {
+        username: Fabricate(:inactive_user).username,
+        password: 'qwerqwer123',
+        email: 'updatedemail@example.com'
+      }
+      expect(response).to_not be_success
+    end
+
+    it "raises an error when the new email is taken" do
+      user = Fabricate(:user)
+
+      xhr :put, :update_activation_email, {
+        username: Fabricate(:inactive_user).username,
+        password: 'qwerqwer123',
+        email: user.email
+      }
+      expect(response).to_not be_success
+    end
+
+    it "can be updated" do
+      user = Fabricate(:inactive_user)
+      token = user.email_tokens.first
+
+      xhr :put, :update_activation_email, {
+        username: user.username,
+        password: 'qwerqwer123',
+        email: 'updatedemail@example.com'
+      }
+
+      expect(response).to be_success
+
+      user.reload
+      expect(user.email).to eq('updatedemail@example.com')
+      expect(user.email_tokens.where(email: 'updatedemail@example.com', expired: false)).to be_present
+
+      token.reload
+      expect(token.expired?).to eq(true)
     end
   end
 

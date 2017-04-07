@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
     unless is_api? || is_user_api?
       super
       clear_current_user
-      render text: "['BAD CSRF']", status: 403
+      render text: "[\"BAD CSRF\"]", status: 403
     end
   end
 
@@ -64,6 +64,12 @@ class ApplicationController < ActionController::Base
 
   def perform_refresh_session
     refresh_session(current_user)
+  end
+
+  def immutable_for(duration)
+    response.cache_control[:max_age] = duration.to_i
+    response.cache_control[:public] = true
+    response.cache_control[:extras] = ["immutable"]
   end
 
   def dont_cache_page
@@ -141,7 +147,11 @@ class ApplicationController < ActionController::Base
 
   def rescue_discourse_actions(type, status_code, include_ember=false)
 
-    if (request.format && request.format.json?) || (request.xhr?)
+    show_json_errors = (request.format && request.format.json?) ||
+                       (request.xhr?) ||
+                       ((params[:external_id] || '').ends_with? '.json')
+
+    if show_json_errors
       # HACK: do not use render_json_error for topics#show
       if request.params[:controller] == 'topics' && request.params[:action] == 'show'
         return render status: status_code, layout: false, text: (status_code == 404 || status_code == 410) ? build_not_found_page(status_code) : I18n.t(type)
@@ -224,8 +234,8 @@ class ApplicationController < ActionController::Base
     preload_anonymous_data
 
     if current_user
-      preload_current_user_data
       current_user.sync_notification_channel_position
+      preload_current_user_data
     end
   end
 
@@ -420,7 +430,7 @@ class ApplicationController < ActionController::Base
       json = ApplicationController.banner_json_cache["json"]
 
       unless json
-        topic = Topic.where(archetype: Archetype.banner).limit(1).first
+        topic = Topic.where(archetype: Archetype.banner).first
         banner = topic.present? ? topic.banner : {}
         ApplicationController.banner_json_cache["json"] = json = MultiJson.dump(banner)
       end

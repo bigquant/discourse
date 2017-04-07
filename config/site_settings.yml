@@ -204,19 +204,12 @@ basic:
       - monthly
       - weekly
       - daily
-  category_featured_topics:
-    client: true
-    default: 3
-    min: 1
   fixed_category_positions:
     client: true
     default: false
   fixed_category_positions_on_create:
     client: true
     default: false
-  show_subcategory_list:
-    default: false
-    client: true
   enable_badges:
     client: true
     default: true
@@ -348,11 +341,11 @@ users:
   min_password_length:
     client: true
     default: 10
-    min: 1
+    min: 8
   min_admin_password_length:
     client: true
     default: 15
-    min: 1
+    min: 8
   password_unique_characters:
     default: 6
     min: 1
@@ -416,6 +409,7 @@ users:
     client: true
   anonymous_posting_min_trust_level:
     default: 1
+    enum: 'TrustLevelSetting'
     client: true
   anonymous_account_duration_minutes:
     default: 10080
@@ -899,9 +893,16 @@ security:
   force_https:
     default: false
     shadowed_by_global: true
+  same_site_cookies:
+    default: Lax
+    type: enum
+    choices:
+      - Lax
+      - Strict
+      - Disabled
+    regex: '^(Lax|Strict|Disabled)$'
   enable_escaped_fragments: true
   allow_index_in_robots_txt: true
-  enable_noscript_support: true
   allow_moderators_to_create_categories: false
   cors_origins:
     default: ''
@@ -944,6 +945,9 @@ spam:
   max_age_unmatched_ips: 365
   num_flaggers_to_close_topic: 5
   num_flags_to_close_topic: 12
+  num_hours_to_close_topic:
+    default: 4
+    min: 1
   auto_respond_to_flag_actions: true
   min_first_post_typing_time: 3000
   auto_block_fast_typers_on_first_post: true
@@ -983,6 +987,14 @@ rate_limits:
   max_prints_per_hour_per_user:
     default: 5
     client: true
+  max_logins_per_ip_per_hour:
+    min: 1
+    max: 20000
+    default: 30
+  max_logins_per_ip_per_minute:
+    min: 1
+    max: 20000
+    default: 6
 
 developer:
   force_hostname:
@@ -1299,6 +1311,7 @@ uncategorized:
 
   native_app_install_banner: false
 
+  share_anonymized_statistics: true
 
 user_preferences:
   default_email_digest_frequency:
@@ -1371,6 +1384,7 @@ user_api:
     hidden: true
   min_trust_level_for_user_api_key:
     default: 1
+    enum: 'TrustLevelSetting'
   allowed_user_api_push_urls:
     default: ''
     type: list

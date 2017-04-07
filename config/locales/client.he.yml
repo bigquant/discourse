@@ -135,8 +135,11 @@ he:
       visible:
         enabled: 'נכנס לרשימה %{when}'
         disabled: 'הוצא מהרשימה %{when}'
+      banner:
+        enabled: 'באנר זה נוצר ב-%{when}. הוא יופיע בראש כל דף עד שישוחרר על ידי המשתמש/ת.'
+        disabled: 'באנר זה הוסר ב-%{when}. הוא לא יופיע יותר בראש כל דף.'
     topic_admin_menu: "פעולות ניהול לנושא"
-    wizard_required: "הגיע הזמן לכוונן את הפורום שלכם! <a href='%{url}' data-auto-route='true'>התחילו את אשף ההקמה</a>!"
+    wizard_required: "ברוכים הבאים לסידקורס החדש שלכם! בואו נתחיל עם <a href='%{url}' data-auto-route='true'>אשף ההתקנה</a> ✨"
     emails_are_disabled: "כל הדוא\"ל היוצא נוטרל באופן גורף על ידי מנהל אתר. שום הודעת דוא\"ל, מכל סוג שהוא, לא תשלח."
     bootstrap_mode_enabled: "כדי להקל על הקמת האתר החדש שלכם, אתם במצב איתחול-ראשוני. כל המשתמשים החדשים יקבלו רמת אמון 1 ויקבלו תמצות יומי במייל. אפשרות זו תכובה אוטומטית כאשר יהיו יותר מ %{min_users} משתמשים."
     bootstrap_mode_disabled: "מצב איתחול-ראשוני יכובה ב 24 השעות הקרובות."
@@ -589,6 +592,8 @@ he:
         error: "(שגיאה)"
         action: "שלח דואר אלקטרוני לשחזור סיסמה"
         set_password: "הזן סיסמה"
+        choose_new: "בחרו סיסמה חדשה"
+        choose: "בחרו סיסמה"
       change_about:
         title: "שינוי בנוגע אליי"
         error: "ארעה שגיאה בשינוי ערך זה."
@@ -642,13 +647,11 @@ he:
         instructions: "ייחודי, ללא רווחים, קצר"
         short_instructions: "אנשים יכולים לאזכר אותך כ @{{username}}"
         available: "שם המשתמש שלך פנוי"
-        global_match: "הדואר האלקטרוני תואם את שם המשתמש הרשום"
-        global_mismatch: "כבר רשום. נסו {{suggestion}}?"
         not_available: "לא זמין. נסו {{suggestion}}?"
+        not_available_no_suggestion: "לא זמין"
         too_short: "שם המשתמש שלך קצר מידי"
         too_long: "שם המשתמש שלך ארוך מידי"
         checking: "בודק זמינות שם משתמש..."
-        enter_email: 'נמצא שם משתמש - הכנס דואר אלקטרוני תואם'
         prefilled: "הדואר האלקטרוני תואם לשם משתמש זה"
       locale:
         title: "שפת ממשק"
@@ -746,10 +749,10 @@ he:
         link_generated: "קישור הזמנה יוצר בהצלחה!"
         valid_for: "קישור הזמנה תקף רק לכתובת המייל הזו: %{email}"
         bulk_invite:
-          none: "עדיין לא הזמנתם לכאן אף אחד. תוכלו לשלוח הזמנות פרטניות, או להזמין כמה אנשים יחד על ידי <a href='https://meta.discourse.org/t/send-bulk-invites/16468'>העלאת קובץ CSV</a>."
+          none: "עדיין לא הזמנתם לכאן אף אחד. שילחו הזמנות אישיות, או הזמינו הרבה אנשים ביחד על ידי <a href='https://meta.discourse.org/t/send-bulk-invites/16468'>העלאת קובץ CSV</a>."
           text: "הזמנה קבוצתית מקובץ"
           success: "העלאת הקובץ החלה בהצלחה, תקבלו התראה באמצעות מסר כאשר התהליך יושלם."
-          error: "מצטערים, הקובץ צריך להיות בפורמט csv."
+          error: "מצטערים, לקובץ צריך להיות פורמט CSV"
       password:
         title: "סיסמה"
         too_short: "הסיסמה שלך קצרה מידי."
@@ -928,7 +931,7 @@ he:
       logging_in: "מתחבר...."
       or: "או"
       authenticating: "מאשר..."
-      awaiting_confirmation: "החשבון שלך ממתין להפעלה. ניתן להשתמש בקישור \"שכחתי סיסמה\" כדי לשלוח דואר אלקטרוני נוסף."
+      awaiting_activation: "החשבון שלכם ממתין להפעלה, השתמשו בקישור ה\"שכחתי סיסמה\" כדי ליצור עוד מייל הפעלה."
       awaiting_approval: "החשבון שלך עדיין לא אושר על ידי חבר צוות. יישלח אליך דואר אלקטרוני כשהוא יאושר."
       requires_invite: "סליחה, גישה לפורום הזה היא בהזמנה בלבד."
       not_activated: "אינך יכול להתחבר עדיין. שלחנו לך דואר אלקטרוני להפעלת החשבון לכתובת: <b>{{sentTo}}</b>. יש לעקוב אחר ההוראות בדואר כדי להפעיל את החשבון."
@@ -939,6 +942,7 @@ he:
       to_continue: "התחברו בבקשה"
       preferences: "אתם צריכים להיות מחוברים כדי לשנות את העדפות המשתמש שלכם."
       forgot: "אין לי את פרטי החשבון שלי"
+      not_approved: "החשבון שלכם עדיין לא אושר. אתם תיודעו במייל כשתוכלו להתחבר."
       google:
         title: "עם גוגל"
         message: "התחברות עם גוגל (יש לוודא שחוסם חלונות קופצים אינו פעיל)"
@@ -960,6 +964,17 @@ he:
       github:
         title: "עם GitHub"
         message: "התחברות עם GitHub (יש לוודא שחוסם חלונות קופצים אינו פעיל)"
+    invites:
+      accept_title: "הזמנה"
+      welcome_to: "ברוכים הבאים ל-%{site_name}!"
+      invited_by: "הוזמנתם על ידי:"
+      social_login_available: "תוכלו גם להתחבר עם כל התחברות חברתית באמצעות כתובת מייל זו."
+      your_email: "כתובת המייל של החשבון שלכם היא <b>%{email}</b>."
+      accept_invite: "קבלת הזמנה"
+      success: "החשבון שלכם נוצר ואתם מחוברים עכשיו."
+      password_label: "קביעת סיסמה (אופציונלי)"
+    password_reset:
+      continue: "המשיכו ל-%{site_name}"
     emoji_set:
       apple_international: "אפל/בינלאומי"
       google: "גוגל"
@@ -1180,6 +1195,8 @@ he:
           first: הפוסטים הראשונים
           pinned: נעוצים
           unpinned: לא נעוצים
+          seen: קראתי
+          unseen: לא קראתי
           wiki: הם ויקי
         statuses:
           label: כאשר נושאים
@@ -1224,8 +1241,10 @@ he:
         selected:
           one: "בחרתם נושא <b>אחד</b>."
           other: "בחרתם <b>{{count}}</b> נושאים."
-        change_tags: "שנו תגיות"
+        change_tags: "החלפת תגים"
+        append_tags: "הוספת תגים"
         choose_new_tags: "בחרו בתגיות חדשות עבור נושאים אלו:"
+        choose_append_tags: "בחרו תגים חדשים להוסיף לנושאים הללו:"
         changed_tags: "התגיות של נושאים אלו השתנו."
       none:
         unread: "אין לכם נושאים שלא נקראו."
@@ -1405,11 +1424,8 @@ he:
         make_banner: "נושא באנר"
         remove_banner: "הסרת נושא באנר"
       reply:
-        post:
-          title: 'תגובה'
-        topic:
-          title: 'תגובה'
-          help: 'התחילו לחבר תגובה לנושא זה'
+        title: 'תגובה'
+        help: 'התחילו לערוך תגובה לנושא זה'
       clear_pin:
         title: "נקה נעיצה"
         help: "נקה סטטוס נעוץ של נושא זה כדי שהוא לא יופיע עוד בראש רשימת הנושאים שלכם"
@@ -1538,6 +1554,7 @@ he:
       wiki_last_edited_on: "וויקי נערך לאחרונה ב"
       last_edited_on: "הפוסט נערך לאחרונה ב"
       reply_as_new_topic: "תגובה כנושא מקושר"
+      reply_as_new_private_message: "תגובה כהודעה חדשה לאותם נמענים"
       continue_discussion: "ממשיך את הדיון מ {{postLink}}:"
       follow_quote: "מעבר לפוסט המצוטט"
       show_full: "הצגת פוסט מלא"
@@ -1709,7 +1726,8 @@ he:
           hide: "הסתרת שינויים"
           show: "הצגת שינויים"
           revert: "חזרה לגרסה זו"
-          edit_wiki: "עריכת ויקי"
+          edit_wiki: "עריכת וויקי"
+          edit_post: "עריכת פוסט"
           comparing_previous_to_current_out_of_total: "<strong>{{previous}}</strong> <i class='fa fa-arrows-h'></i> <strong>{{current}}</strong> / {{total}}"
         displays:
           inline:
@@ -1721,6 +1739,17 @@ he:
           side_by_side_markdown:
             title: "הציגו את ההבדלי המקור הגולמיים זה לצד זה"
             button: 'גולמי'
+      raw_email:
+        displays:
+          raw:
+            title: "הצגת מייל גולמי"
+            button: 'גולמי'
+          text_part:
+            title: "הצגת טקסט כחלק מהמייל"
+            button: 'טקסט'
+          html_part:
+            title: "הצגת חלק ה HTML של המייל"
+            button: 'HTML'
     category:
       can: 'יכול&hellip; '
       none: '(ללא קטגוריה)'
@@ -1772,8 +1801,13 @@ he:
       email_in_disabled: "אפשרות הפרסום של נושאים חדשים דרך דוא\"ל נוטרלה בהגדרות האתר. כדי לאפשר פרסום באמצעות  משלוח דוא\"ל,"
       email_in_disabled_click: 'אפשרו את את ההגדרה "דוא"ל נכנס"'
       suppress_from_homepage: "הרחיקו קטגוריה זו מהעמוד הראשי."
+      show_subcategory_list: "הצגת רשימת קטגוריות משנה מעל נושאים בקטגוריה זו."
+      num_featured_topics: "מספר הנושאים המוצגים בדף הקטגוריות:"
+      subcategory_num_featured_topics: "מספר הנושאים המומלצים בדף קטגוריית ההורה:"
       all_topics_wiki: "כברירת מחדל נושאים חדשים יהיו וויקי."
-      sort_order: "סידור ברירת מחדל:"
+      subcategory_list_style: "סגנון רשימות קטגוריות משנה:"
+      sort_order: "סידור ברירת מחדל לנושאים:"
+      default_view: "תצוגת ברירת מחדל לנושאים:"
       allow_badges_label: "הרשו לעיטורים להיות מוענקים בקטגוריה זו"
       edit_permissions: "ערוך הרשאות"
       add_permission: "הוסף הרשאה"
@@ -1811,6 +1845,11 @@ he:
         created: "נוצרו"
       sort_ascending: 'בסדר עולה'
       sort_descending: 'בסדר יורד'
+      subcategory_list_styles:
+        rows: "שורות"
+        rows_with_featured_topics: "שורות עם נושאים מומלצים"
+        boxes: "קופסאות"
+        boxes_with_featured_topics: "קופסאות אם נושאים מומלצים"
     flagging:
       title: 'תודה על עזרתך לשמירה על תרבות הקהילה שלנו!'
       action: 'דגלו פוסט'
@@ -1912,7 +1951,7 @@ he:
     history: "היסטוריה"
     changed_by: "מאת {{author}}"
     raw_email:
-      title: "גלם הדוא\"ל"
+      title: "מייל נכנס"
       not_available: "לא זמין!"
     categories_list: "רשימת קטגוריות"
     filters:
@@ -2315,6 +2354,8 @@ he:
         add_owners: הוספת בעלים
         incoming_email: "התאימו אישית כתובת מייל נכנס"
         incoming_email_placeholder: "הכניסו כתובת מייל"
+        none_selected: "בחירת קבוצה כדי להתחיל"
+        no_custom_groups: "יצירת קבוצה מותאמת אישית"
       api:
         generate_master: "ייצר מפתח מאסטר ל-API"
         none: "אין מפתחות API פעילים כרגע."
@@ -2450,7 +2491,8 @@ he:
             without_uploads: "כן (ללא הכללת קבצים)"
           download:
             label: "הורדה"
-            title: "הורד את הגיבוי"
+            title: "שליחת מייל עם לינק להורדה"
+            alert: "קישור להורדת גיבוי זה נשלח אליכם."
           destroy:
             title: "הסר את הגיבוי"
             confirm: "אתם בטוחים שברצונכם להשמיד את הגיבוי הזה?"
@@ -2806,6 +2848,7 @@ he:
         refresh_browsers_message: "ההודעה נשלחה לכל הלקוחות!"
         show_public_profile: "הצג פרופיל פומבי"
         impersonate: 'התחזה'
+        action_logs: "יומני פעולות"
         ip_lookup: "חיפוש IP"
         log_out: "התנתקות"
         logged_out: "המשתמש/ת התנתקו בכל המכשירים"

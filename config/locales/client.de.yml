@@ -136,7 +136,7 @@ de:
         enabled: 'sichtbar gemacht, %{when}'
         disabled: 'unsichtbar gemacht, %{when}'
     topic_admin_menu: "Thema administrieren"
-    wizard_required: "Es ist an der Zeit, Dein Forum einzurichten! <a href='%{url}' data-auto-route='true'>Einrichtungs-Assistenten starten</a>!"
+    wizard_required: "Willkommen bei deinem neuen Discourse! Lass uns mit dem <a href='%{url}' data-auto-route='true'>Setup-Assistenten</a> ✨ starten"
     emails_are_disabled: "Die ausgehende E-Mail-Kommunikation wurde von einem Administrator global deaktiviert. Es werden keinerlei Benachrichtigungen per E-Mail verschickt."
     bootstrap_mode_enabled: "Damit du mit deiner Seite einfacher loslegen kannst, befindest du dich im Starthilfe-Modus. Alle neuen Benutzer erhalten die Vertrauensstufe 1 und bekommen eine tägliche E-Mail-Zusammenfassung. Der Modus wird automatisch deaktiviert, sobald sich mindestens %{min_users} Benutzer angemeldet haben."
     bootstrap_mode_disabled: "Der Starthilfe-Modus wird innerhalb der nächsten 24 Stunden deaktiviert."
@@ -589,6 +589,8 @@ de:
         error: "(Fehler)"
         action: "Sende eine E-Mail zum Zurücksetzen des Passworts"
         set_password: "Passwort ändern"
+        choose_new: "Wähle ein neues Passwort"
+        choose: "Wähle ein Passwort"
       change_about:
         title: "„Über mich“ ändern"
         error: "Beim Ändern dieses Wertes ist ein Fehler aufgetreten."
@@ -623,7 +625,7 @@ de:
         instructions: "Hintergrundbilder werden zentriert und haben eine Standardbreite von 590px."
       email:
         title: "E-Mail"
-        instructions: "Wird niemals öffentlich angezeigt"
+        instructions: "wird nicht öffentlich angezeigt"
         ok: "Wir senden dir zur Bestätigung eine E-Mail"
         invalid: "Bitte gib eine gültige E-Mail-Adresse ein"
         authenticated: "Deine E-Mail-Adresse wurde von {{provider}} bestätigt"
@@ -633,22 +635,20 @@ de:
           other: "Wir werden dir nur dann eine E-Mail senden, wenn wir dich nicht innerhalb der letzten {{count}} Minuten gesehen haben."
       name:
         title: "Name"
-        instructions: "Dein vollständiger Name (optional)"
+        instructions: "dein vollständiger Name (optional)"
         instructions_required: "Dein vollständiger Name"
         too_short: "Dein Name ist zu kurz"
         ok: "Dein Name sieht in Ordnung aus"
       username:
         title: "Benutzername"
-        instructions: "Eindeutig, keine Leerzeichen, kurz"
+        instructions: "einzigartig, keine Leerzeichen, kurz"
         short_instructions: "Leute können dich mit @{{username}} erwähnen"
         available: "Dein Benutzername ist verfügbar"
-        global_match: "E-Mail-Adresse entspricht dem registrierten Benutzernamen"
-        global_mismatch: "Bereits registriert. Wie wäre es mit {{suggestion}}?"
         not_available: "Nicht verfügbar. Wie wäre es mit {{suggestion}}?"
+        not_available_no_suggestion: "Nicht verfügbar"
         too_short: "Dein Benutzername ist zu kurz"
         too_long: "Dein Benutzername ist zu lang"
         checking: "Verfügbarkeit wird geprüft…"
-        enter_email: 'Benutzername gefunden; gib die zugehörige E-Mail-Adresse ein'
         prefilled: "E-Mail-Adresse entspricht diesem registrierten Benutzernamen"
       locale:
         title: "Oberflächensprache"
@@ -746,10 +746,10 @@ de:
         link_generated: "Der Einladungslink wurde erfolgreich generiert!"
         valid_for: "Der Einladungslink ist nur für die Adresse %{email} gültig"
         bulk_invite:
-          none: "Du hast hier noch niemanden eingeladen. Du kannst einzelne Einladungen versenden, oder eine Reihe von Leuten auf einmal einladen, indem du <a href='https://meta.discourse.org/t/send-bulk-invites/16468'>eine CSV-Datei hochlädst</a>."
+          none: "Du hast noch niemanden eingeladen. Verschicke eine individuelle Einladung, oder lade gleich mehrere Leute auf einmal durch <a href='https://meta.discourse.org/t/send-bulk-invites/16468'>Hochladen einer CSV-Datei</a>ein."
           text: "Masseneinladung aus Datei"
           success: "Die Datei wurde erfolgreich hochgeladen. Du erhältst eine Nachricht, sobald der Vorgang abgeschlossen ist."
-          error: "Entschuldige, die Datei sollte im CSV-Format sein."
+          error: "Die Datei sollte im CSV Format vorliegen."
       password:
         title: "Passwort"
         too_short: "Dein Passwort ist zu kurz."
@@ -757,7 +757,7 @@ de:
         same_as_username: "Dein Passwort entspricht deinem Benutzernamen."
         same_as_email: "Dein Passwort entspricht deiner E-Mail-Adresse."
         ok: "Dein Passwort sieht in Ordnung aus."
-        instructions: "Mindestens %{count} Zeichen."
+        instructions: "mindestens %{count} Zeichen"
       summary:
         title: "Übersicht"
         stats: "Statistiken"
@@ -928,7 +928,7 @@ de:
       logging_in: "Anmeldung läuft…"
       or: "Oder"
       authenticating: "Authentifiziere…"
-      awaiting_confirmation: "Dein Konto ist noch nicht aktiviert. Verwende den 'Passwort vergessen'-Link, um eine weitere E-Mail mit Anweisungen zur Aktivierung zu erhalten."
+      awaiting_activation: "Dein Konto ist noch nicht aktiviert. Verwende den 'Passwort vergessen'-Link, um eine weitere E-Mail mit Anweisungen zur Aktivierung zu erhalten."
       awaiting_approval: "Dein Konto wurde noch nicht von einem Team-Mitglied genehmigt. Du bekommst eine E-Mail, sobald das geschehen ist."
       requires_invite: "Entschuldige, der Zugriff auf dieses Forum ist nur mit einer Einladung möglich."
       not_activated: "Du kannst dich noch nicht anmelden. Wir haben dir schon eine E-Mail zur Aktivierung an <b>{{sentTo}}</b> geschickt. Bitte folge den Anweisungen in dieser E-Mail, um dein Benutzerkonto zu aktivieren."
@@ -939,6 +939,7 @@ de:
       to_continue: "Melde dich bitte an"
       preferences: "Du musst angemeldet sein, um deine Benutzereinstellungen bearbeiten zu können."
       forgot: "Ich kann mich nicht an meine Zugangsdaten erinnern"
+      not_approved: "Dein Benutzerkonto wurde noch nicht genehmigt. Du wirst per E-Mail benachrichtigt, sobald du dich anmelden kannst."
       google:
         title: "mit Google"
         message: "Authentifiziere mit Google (stelle sicher, dass keine Pop-up-Blocker aktiviert sind)"
@@ -960,6 +961,17 @@ de:
       github:
         title: "mit GitHub"
         message: "Authentifiziere mit GitHub (stelle sicher, dass keine Pop-up-Blocker aktiviert sind)"
+    invites:
+      accept_title: "Einladung"
+      welcome_to: "Willkommen bei %{site_name}!"
+      invited_by: "Du wurdest eingeladen von: "
+      social_login_available: "Du wirst dich auch über andere sozialen Netzwerken mit dieser E-Mail-Adresse anmelden können."
+      your_email: "Die E-Mail-Adresse deines Benutzerkontos ist <b>%{email}</b>"
+      accept_invite: "Einladung annehmen"
+      success: "Dein Konto wurde erstellt und du bist jetzt angemeldet."
+      password_label: "Passwort setzen (optional)"
+    password_reset:
+      continue: "Weiter zu %{site_name}"
     emoji_set:
       apple_international: "Apple"
       google: "Google"
@@ -1004,7 +1016,7 @@ de:
         post_length: "Beitrag muss mindestens {{min}} Zeichen lang sein"
         try_like: 'Hast du schon die <i class="fa fa-heart"></i> Schaltfläche ausprobiert?'
         category_missing: "Du musst eine Kategorie auswählen"
-      save_edit: "Änderungen speichern"
+      save_edit: "Speichern"
       reply_original: "Auf das ursprünglichen Thema antworten"
       reply_here: "Hier antworten"
       reply: "Antworten"
@@ -1180,6 +1192,8 @@ de:
           first: sind die allerersten Beiträge
           pinned: sind angeheftet
           unpinned: sind nicht angeheftet
+          seen: Habe ich gelesen
+          unseen: Habe ich nicht gelesen
           wiki: sind Wiki
         statuses:
           label: Wo Themen
@@ -1224,8 +1238,10 @@ de:
         selected:
           one: "Du hast <b>ein</b> Thema ausgewählt."
           other: "Du hast <b>{{count}}</b> Themen ausgewählt."
-        change_tags: "Schlagwörter ändern"
+        change_tags: "Schlagwörter ersetzen"
+        append_tags: "Schlagwörter hinzufügen"
         choose_new_tags: "Neue Schlagwörter für die gewählten Themen wählen:"
+        choose_append_tags: "Wähle neue Schlagwörter, die diesen Themen hinzugefügt werden sollen:"
         changed_tags: "Die Schlagwörter der gewählten Themen wurden geändert."
       none:
         unread: "Du hast alle Themen gelesen."
@@ -1403,10 +1419,8 @@ de:
         make_banner: "Ankündigungsbanner"
         remove_banner: "Ankündigungsbanner entfernen"
       reply:
-        post:
-          title: 'Antworten'
-        topic:
-          title: 'Antworten'
+        title: 'Antworten'
+        help: 'beginne damit eine Antwort auf dieses Thema zu verfassen'
       clear_pin:
         title: "Loslösen"
         help: "Dieses Thema von der Themenliste loslösen, sodass es nicht mehr am Anfang der Liste steht."
@@ -1535,6 +1549,7 @@ de:
       wiki_last_edited_on: "Wiki zuletzt bearbeitet am"
       last_edited_on: "Beitrag zuletzt bearbeitet am"
       reply_as_new_topic: "Mit verknüpftem Thema antworten"
+      reply_as_new_private_message: "Antworte als neue Nachricht an die gleichen Empfänger"
       continue_discussion: "Fortsetzung der Diskussion von {{postLink}}:"
       follow_quote: "springe zum zitierten Beitrag"
       show_full: "Zeige ganzen Beitrag"
@@ -1706,17 +1721,30 @@ de:
           hide: "Überarbeitung verstecken"
           show: "Überarbeitung anzeigen"
           revert: "Diese Überarbeitung wiederherstellen"
+          edit_wiki: "Bearbeite Wiki"
+          edit_post: "Bearbeite Beitrag"
           comparing_previous_to_current_out_of_total: "<strong>{{previous}}</strong> <i class='fa fa-arrows-h'></i> <strong>{{current}}</strong> / {{total}}"
         displays:
           inline:
             title: "Zeige die Änderungen inline an"
-            button: '<i class="fa fa-square-o"></i> HTML'
+            button: 'HTML'
           side_by_side:
             title: "Zeige die Änderungen nebeneinander an"
-            button: '<i class="fa fa-columns"></i> HTML'
+            button: 'HTML'
           side_by_side_markdown:
             title: "Zeige die Originaltexte zum Vergleich nebeneinander an"
-            button: '<i class="fa fa-columns"></i> Original'
+            button: 'Quelltext'
+      raw_email:
+        displays:
+          raw:
+            title: "Zeige den Quelltext der E-Mail"
+            button: 'Quelltext'
+          text_part:
+            title: "Zeige den Text-Teil der E-Mail"
+            button: 'Text'
+          html_part:
+            title: "Zeige den HTML-Teil der E-Mail"
+            button: 'HTML'
     category:
       can: 'kann&hellip; '
       none: '(keine Kategorie)'
@@ -1768,8 +1796,12 @@ de:
       email_in_disabled: "Das Erstellen von neuen Themen per E-Mail ist in den Website-Einstellungen deaktiviert. Um das Erstellen von neuen Themen per E-Mail zu erlauben,"
       email_in_disabled_click: 'aktiviere die Einstellung „email in“.'
       suppress_from_homepage: "Löse diese Kategorie von der Startseite."
+      show_subcategory_list: "Zeige Liste von Unterkategorien oberhalb von Themen in dieser Kategorie"
+      num_featured_topics: "Anzahl der Themen, die auf der Kategorien-Seite angezeigt werden"
+      subcategory_num_featured_topics: "Anzahl beworbener Themen, die auf der Seite der übergeordneten Kategorie angezeigt werden:"
       all_topics_wiki: "Mache neue Themen standardmäßig zu Wikis."
       sort_order: "Standardsortierung:"
+      default_view: "Standardansicht:"
       allow_badges_label: "Erlaube das Verleihen von Abzeichen in dieser Kategorie."
       edit_permissions: "Berechtigungen bearbeiten"
       add_permission: "Berechtigung hinzufügen"
@@ -1904,7 +1936,7 @@ de:
     history: "Verlauf"
     changed_by: "von {{author}}"
     raw_email:
-      title: "Unverarbeitete E-Mail"
+      title: "Eingegangene E-Mail"
       not_available: "Nicht verfügbar!"
     categories_list: "Liste der Kategorien"
     filters:
@@ -2307,6 +2339,8 @@ de:
         add_owners: Eigentümer hinzufügen
         incoming_email: "Benutzerdefinierte Adresse für eingehende E-Mails"
         incoming_email_placeholder: "E-Mail-Adresse eingeben"
+        none_selected: "Wähle eine Gruppe, um loszulegen"
+        no_custom_groups: "Erstelle eine neue benutzerdefinierte Gruppe"
       api:
         generate_master: "Master API Key erzeugen"
         none: "Es gibt momentan keine aktiven API-Keys"
@@ -2442,7 +2476,8 @@ de:
             without_uploads: "Ja (ohne Dateien)"
           download:
             label: "Herunterladen"
-            title: "Backup herunterladen"
+            title: "Sende E-Mail mit Download-Link"
+            alert: "Ein Link zum Download dieses Backups wurde dir per E-Mail geschickt."
           destroy:
             title: "Das Backup löschen"
             confirm: "Möchtest du wirklich das Backup löschen?"
@@ -2688,6 +2723,7 @@ de:
             deactivate_user: "Benutzer deaktivieren"
             change_readonly_mode: "Nur-Lesen-Modus ändern"
             backup_download: "Backup herunterladen"
+            backup_destroy: "Backup löschen"
         screened_emails:
           title: "Gefilterte E-Mails"
           description: "Wenn jemand ein Konto erstellt, werden die folgenden E-Mail-Adressen überprüft und es wird die Anmeldung blockiert oder eine andere Aktion ausgeführt."
@@ -2696,7 +2732,7 @@ de:
             allow: "Erlauben"
         screened_urls:
           title: "Gefilterte URLs"
-          description: "Die aufgelisteten URLs wurden in Beiträgen verwendet, die von Spammen erstellt wurden."
+          description: "Die aufgelisteten URLs wurden in Beiträgen verwendet, die von Spammern erstellt wurden."
           url: "URL"
           domain: "Domain"
         screened_ips:
@@ -2797,6 +2833,7 @@ de:
         refresh_browsers_message: "Nachricht wurde an alle Clients gesendet!"
         show_public_profile: "Zeige öffentliches Profil"
         impersonate: 'Nutzersicht'
+        action_logs: "Aktionsprotokoll"
         ip_lookup: "IP-Abfrage"
         log_out: "Abmelden"
         logged_out: "Der Benutzer wurde auf allen Geräten abgemeldet"

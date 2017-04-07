@@ -3,6 +3,7 @@ import { iconNode } from 'discourse/helpers/fa-icon-node';
 import { avatarImg } from 'discourse/widgets/post';
 import DiscourseURL from 'discourse/lib/url';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
+import { applySearchAutocomplete } from "discourse/lib/search";
 
 import { h } from 'virtual-dom';
 
@@ -163,6 +164,13 @@ createWidget('header-buttons', {
   }
 });
 
+const forceContextEnabled = ['category', 'user', 'private_messages'];
+
+let additionalPanels = [];
+export function attachAdditionalPanel(name, toggle, transformAttrs) {
+  additionalPanels.push({ name, toggle, transformAttrs });
+}
+
 export default createWidget('header', {
   tagName: 'header.d-header.clearfix',
   buildKey: () => `header`,
@@ -195,21 +203,27 @@ export default createWidget('header', {
 
       if (state.searchContextType !== contextType) {
         state.contextEnabled = undefined;
+        state.searchContextType = contextType;
       }
 
-      state.searchContextType = contextType;
-
       if (state.contextEnabled === undefined) {
-        if (contextType === 'category' || contextType === 'user') {
+        if (forceContextEnabled.includes(contextType)) {
           state.contextEnabled = true;
         }
       }
+
       panels.push(this.attach('search-menu', { contextEnabled: state.contextEnabled }));
     } else if (state.hamburgerVisible) {
       panels.push(this.attach('hamburger-menu'));
     } else if (state.userVisible) {
       panels.push(this.attach('user-menu'));
     }
+
+    additionalPanels.map((panel) => {
+      if (this.state[panel.toggle]) {
+        panels.push(this.attach(panel.name, panel.transformAttrs.call(this, attrs, state)));
+      }
+    });
 
     const contents = [ this.attach('home-logo', { minimized: !!attrs.topic }),
                        h('div.panel.clearfix', panels) ];
@@ -256,7 +270,14 @@ export default createWidget('header', {
     this.updateHighlight();
 
     if (this.state.searchVisible) {
-      Ember.run.schedule('afterRender', () => $('#search-term').focus().select());
+      Ember.run.schedule('afterRender', () => {
+        const $searchInput = $('#search-term');
+        $searchInput.focus().select();
+
+        applySearchAutocomplete($searchInput, this.siteSettings, this.appEvents, {
+          appendSelector: '.menu-panel'
+        });
+      });
     }
   },
 
@@ -301,6 +322,7 @@ export default createWidget('header', {
   },
 
   searchMenuContextChanged(value) {
+    this.state.contextType = this.register.lookup('search-service:main').get('contextType');
     this.state.contextEnabled = value;
   },
 

@@ -6,7 +6,7 @@
 # To work with us on translations, see: https://www.transifex.com/projects/p/discourse-org/
 #
 # This is a "source" file, which is used by Transifex to get translations for other languages.
-# After this file is changed, it needs to be pushed by a maintainer to Transifex:
+# After this file is changed, ift needs to be pushed by a maintainer to Transifex:
 #
 #   tx push -s
 #
@@ -162,10 +162,13 @@ en:
       visible:
         enabled: 'listed %{when}'
         disabled: 'unlisted %{when}'
+      banner:
+        enabled: 'made this a banner %{when}. It will appear at the top of every page until it is dismissed by the user.'
+        disabled: 'removed this banner %{when}. It will no longer appear at the top of every page.'
 
     topic_admin_menu: "topic admin actions"
 
-    wizard_required: "It's time to configure your forum! <a href='%{url}' data-auto-route='true'>Start the Setup Wizard</a>!"
+    wizard_required: "Welcome to your new Discourse! Let’s get started with <a href='%{url}' data-auto-route='true'>the setup wizard</a> ✨"
     emails_are_disabled: "All outgoing email has been globally disabled by an administrator. No email notifications of any kind will be sent."
 
     bootstrap_mode_enabled: "To make launching your new site easier, you are in bootstrap mode. All new users will be granted trust level 1 and have daily email digest updates enabled. This will be automatically turned off when total user count exceeds %{min_users} users."
@@ -418,7 +421,7 @@ en:
       automatic_group: Automatic Group
       closed_group: Closed Group
       is_group_user: "You are a member of this group"
-      allow_membership_requests: "Allow users to send membership requests to group owners (Requires everyone to be able to mention the group)"
+      allow_membership_requests: "Allow users to send membership requests to group owners"
       membership: "Membership"
       name: "Name"
       user_count: "Number of Members"
@@ -624,6 +627,7 @@ en:
       muted_users_instructions: "Suppress all notifications from these users."
       muted_topics_link: "Show muted topics"
       watched_topics_link: "Show watched topics"
+      tracked_topics_link: "Show tracked topics"
       automatically_unpin_topics: "Automatically unpin topics when I reach the bottom."
       apps: "Apps"
       revoke_access: "Revoke Access"
@@ -1030,13 +1034,19 @@ en:
       logging_in: "Signing In..."
       or: "Or"
       authenticating: "Authenticating..."
-      awaiting_confirmation: "Your account is awaiting activation, use the forgot password link to issue another activation email."
+      awaiting_activation: "Your account is awaiting activation, use the forgot password link to issue another activation email."
       awaiting_approval: "Your account has not been approved by a staff member yet. You will be sent an email when it is approved."
       requires_invite: "Sorry, access to this forum is by invite only."
       not_activated: "You can't log in yet. We previously sent an activation email to you at <b>{{sentTo}}</b>. Please follow the instructions in that email to activate your account."
       not_allowed_from_ip_address: "You can't login from that IP address."
       admin_not_allowed_from_ip_address: "You can't log in as admin from that IP address."
       resend_activation_email: "Click here to send the activation email again."
+
+      resend_title: "Resend Activation Email"
+      change_email: "Change Email Address"
+      provide_new_email: "Provide a new address and we'll resend your confirmation email."
+      submit_new_email: "Update Email Address"
+
       sent_activation_email_again: "We sent another activation email to you at <b>{{currentEmail}}</b>. It might take a few minutes for it to arrive; be sure to check your spam folder."
       to_continue: "Please Log In"
       preferences: "You need to be logged in to change your user preferences."
@@ -1187,16 +1197,6 @@ en:
         body: "Right now this message is only being sent to yourself!"
 
       admin_options_title: "Optional staff settings for this topic"
-      auto_close:
-        label: "Auto-close topic time:"
-        error: "Please enter a valid value."
-        based_on_last_post: "Don't close until the last post in the topic is at least this old."
-        all:
-          units: ""
-          examples: 'Enter number of hours (24), absolute time (17:30) or timestamp (2013-11-22 14:00).'
-        limited:
-          units: "(# of hours)"
-          examples: 'Enter number of hours (24).'
 
     notifications:
       title: "notifications of @name mentions, replies to your posts and topics, messages, etc"
@@ -1273,6 +1273,7 @@ en:
       sort_by: "Sort by"
       relevance: "Relevance"
       latest_post: "Latest Post"
+      latest_topic: "Latest Topic"
       most_viewed: "Most Viewed"
       most_liked: "Most Liked"
       select_all: "Select All"
@@ -1316,6 +1317,8 @@ en:
           first: are the very first post
           pinned: are pinned
           unpinned: are not pinned
+          seen: I've read
+          unseen: I've not read
           wiki: are wiki
         statuses:
           label: Where topics
@@ -1362,8 +1365,10 @@ en:
         selected:
           one: "You have selected <b>1</b> topic."
           other: "You have selected <b>{{count}}</b> topics."
-        change_tags: "Change Tags"
+        change_tags: "Replace Tags"
+        append_tags: "Append Tags"
         choose_new_tags: "Choose new tags for these topics:"
+        choose_append_tags: "Choose new tags to append for these topics:"
         changed_tags: "The tags of those topics were changed."
 
       none:
@@ -1471,11 +1476,39 @@ en:
       jump_reply_down: jump to later reply
       deleted: "The topic has been deleted"
 
-      auto_close_notice: "This topic will automatically close %{timeLeft}."
-      auto_close_notice_based_on_last_post: "This topic will close %{duration} after the last reply."
+      topic_status_update:
+        title: "Set Topic Timer"
+        save: "Set Timer"
+        time: "Time:"
+        remove: "Remove Timer"
+        publish_to: "Publish To:"
+      auto_update_input:
+        limited:
+          units: "(# of hours)"
+          examples: 'Enter number of hours (24).'
+        all:
+          units: ""
+          examples: 'Enter number of hours (24), absolute time (17:30) or timestamp (2013-11-22 14:00).'
+      publish_to_category:
+        title: "Schedule Publishing"
+      temp_open:
+        title: "Open Temporarily"
+      auto_reopen:
+        title: "Auto-open Topic"
+      temp_close:
+        title: "Close Temporarily"
+      auto_close:
+        title: "Auto-Close Topic"
+        label: "Auto-close topic time:"
+        error: "Please enter a valid value."
+        based_on_last_post: "Don't close until the last post in the topic is at least this old."
+
+      status_update_notice:
+        auto_open: "This topic will automatically open %{timeLeft}."
+        auto_close: "This topic will automatically close %{timeLeft}."
+        auto_publish_to_category: "This topic will be published to <a href=%{categoryUrl}>#%{categoryName}</a> %{timeLeft}."
+        auto_close_based_on_last_post: "This topic will close %{duration} after the last reply."
       auto_close_title: 'Auto-Close Settings'
-      auto_close_save: "Save"
-      auto_close_remove: "Don't Auto-Close This Topic"
       auto_close_immediate:
         one: "The last post in the topic is already 1 hour old, so the topic will be closed immediately."
         other: "The last post in the topic is already %{count} hours old, so the topic will be closed immediately."
@@ -1511,7 +1544,7 @@ en:
           "2_8": 'You will receive notifications because you are tracking this category.'
           "2_4": 'You will receive notifications because you posted a reply to this topic.'
           "2_2": 'You will receive notifications because you are tracking this topic.'
-          "2": 'You will receive notifications because you <a href="/users/{{username}}/preferences">read this topic</a>.'
+          "2": 'You will receive notifications because you <a href="/u/{{username}}/preferences">read this topic</a>.'
           "1_2": 'You will be notified if someone mentions your @name or replies to you.'
           "1": 'You will be notified if someone mentions your @name or replies to you.'
           "0_7": 'You are ignoring all notifications in this category.'
@@ -1548,7 +1581,7 @@ en:
         open: "Open Topic"
         close: "Close Topic"
         multi_select: "Select Posts…"
-        auto_close: "Auto Close…"
+        timed_update: "Set Topic Timer..."
         pin: "Pin Topic…"
         unpin: "Un-Pin Topic…"
         unarchive: "Unarchive Topic"
@@ -1916,6 +1949,18 @@ en:
             title: "Show the raw source diffs side-by-side"
             button: 'Raw'
 
+      raw_email:
+        displays:
+          raw:
+            title: "Show the raw email"
+            button: 'Raw'
+          text_part:
+            title: "Show the text part of the email"
+            button: 'Text'
+          html_part:
+            title: "Show the html part of the email"
+            button: 'HTML'
+
     category:
       can: 'can&hellip; '
       none: '(no category)'
@@ -1967,8 +2012,14 @@ en:
       email_in_disabled: "Posting new topics via email is disabled in the Site Settings. To enable posting new topics via email, "
       email_in_disabled_click: 'enable the "email in" setting.'
       suppress_from_homepage: "Suppress this category from the homepage."
+      show_subcategory_list: "Show subcategory list above topics in this category."
+      num_featured_topics: "Number of topics shown on the categories page:"
+      subcategory_num_featured_topics: "Number of featured topics on parent category's page:"
       all_topics_wiki: "Make new topics wikis by default."
-      sort_order: "Default Sort:"
+      subcategory_list_style: "Subcategory List Style:"
+      sort_order: "Topic List Sort By:"
+      default_view: "Default Topic List:"
+      default_top_period: "Default Top Period:"
       allow_badges_label: "Allow badges to be awarded in this category"
       edit_permissions: "Edit Permissions"
       add_permission: "Add Permission"
@@ -2006,6 +2057,11 @@ en:
         created: "Created"
       sort_ascending: 'Ascending'
       sort_descending: 'Descending'
+      subcategory_list_styles:
+        rows: "Rows"
+        rows_with_featured_topics: "Rows with featured topics"
+        boxes: "Boxes"
+        boxes_with_featured_topics: "Boxes with featured topics"
 
     flagging:
       title: 'Thanks for helping to keep our community civil!'
@@ -2117,7 +2173,7 @@ en:
     changed_by: "by {{author}}"
 
     raw_email:
-      title: "Raw Email"
+      title: "Incoming Email"
       not_available: "Not available!"
 
     categories_list: "Categories List"
@@ -2548,6 +2604,8 @@ en:
         add_owners: Add owners
         incoming_email: "Custom incoming email address"
         incoming_email_placeholder: "enter email address"
+        none_selected: "Select a group to get started"
+        no_custom_groups: "Create a new custom group"
 
       api:
         generate_master: "Generate Master API Key"
@@ -2686,7 +2744,8 @@ en:
             without_uploads: "Yes (do not include files)"
           download:
             label: "Download"
-            title: "Download the backup"
+            title: "Send email with download link"
+            alert: "A link to download this backup has been emailed to you."
           destroy:
             title: "Remove the backup"
             confirm: "Are you sure you want to destroy this backup?"
@@ -3047,8 +3106,6 @@ en:
         blocked: "Blocked?"
         staged: "Staged?"
         show_admin_profile: "Admin"
-        edit_title: "Edit Title"
-        save_title: "Save Title"
         refresh_browsers: "Force browser refresh"
         refresh_browsers_message: "Message sent to all clients!"
         show_public_profile: "Show Public Profile"
@@ -3059,6 +3116,7 @@ en:
         logged_out: "User was logged out on all devices"
         revoke_admin: 'Revoke Admin'
         grant_admin: 'Grant Admin'
+        grant_admin_confirm: "We've sent you an email to verify the new administrator. Please open it and follow the instructions."
         revoke_moderation: 'Revoke Moderation'
         grant_moderation: 'Grant Moderation'
         unblock: 'Unblock'

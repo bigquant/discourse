@@ -2,6 +2,7 @@ import { createWidget, applyDecorators } from 'discourse/widgets/widget';
 import { h } from 'virtual-dom';
 import DiscourseURL from 'discourse/lib/url';
 import { ajax } from 'discourse/lib/ajax';
+import { userPath } from 'discourse/lib/url';
 
 const flatten = array => [].concat.apply([], array);
 
@@ -19,7 +20,7 @@ createWidget('priority-faq-link', {
   click(e) {
     e.preventDefault();
     if (this.siteSettings.faq_url === this.attrs.href) {
-      ajax("/users/read-faq", { method: "POST" }).then(() => {
+      ajax(userPath("read-faq"), { method: "POST" }).then(() => {
         this.currentUser.set('read_faq', true);
         DiscourseURL.routeToTag($(e.target).closest('a')[0]);
       });
@@ -36,7 +37,7 @@ export default createWidget('hamburger-menu', {
     const { currentUser } = this;
 
     const links = [{ route: 'admin', className: 'admin-link', icon: 'wrench', label: 'admin_title' },
-                   { route: 'adminFlags',
+                   { href: '/admin/flags/active',
                      className: 'flagged-posts-link',
                      icon: 'flag',
                      label: 'flags_title',
@@ -53,7 +54,7 @@ export default createWidget('hamburger-menu', {
     }
 
     if (currentUser.admin) {
-      links.push({ route: 'adminSiteSettings',
+      links.push({ href: '/admin/site_settings/category/required',
                    icon: 'gear',
                    label: 'admin.site_settings.title',
                    className: 'settings-link' });
@@ -117,11 +118,10 @@ export default createWidget('hamburger-menu', {
 
   listCategories() {
     const hideUncategorized = !this.siteSettings.allow_uncategorized_topics;
-    const showSubcatList = this.siteSettings.show_subcategory_list;
     const isStaff = Discourse.User.currentProp('staff');
 
     const categories = Discourse.Category.list().reject((c) => {
-      if (showSubcatList && c.get('parent_category_id')) { return true; }
+      if (c.get('parentCategory.show_subcategory_list')) { return true; }
       if (hideUncategorized && c.get('isUncategorizedCategory') && !isStaff) { return true; }
       return false;
     });

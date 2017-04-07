@@ -8,7 +8,7 @@
   <span class='link-top-line'>
     {{raw-plugin-outlet name="topic-list-before-status"}}
     {{raw "topic-status" topic=topic}}
-    {{topic-link topic}}
+    {{topic-link topic class="raw-link raw-topic-link"}}
     {{#if topic.featured_link}}
       {{topic-featured-link topic}}
     {{/if}}
@@ -18,15 +18,7 @@
     {{/if}}
   </span>
 
-  {{#if topic.tags}}
-    <div class='discourse-tags'>
-    {{#each topic.visibleListTags as |tag|}}
-      {{discourse-tag tag}}
-    {{/each}}
-    {{raw-plugin-outlet name="topic-list-custom-tags"}}
-    </div>
-  {{/if}}
-  {{raw-plugin-outlet name="topic-list-tags"}}
+  {{discourse-tags topic mode="list"}}
   {{#if expandPinned}}
     {{raw "list/topic-excerpt" topic=topic}}
   {{/if}}

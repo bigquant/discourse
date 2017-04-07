@@ -40,10 +40,36 @@ test("search scope checkbox", () => {
   });
   click('#search-button');
 
-  visit("/users/eviltrout");
+  visit("/u/eviltrout");
   click('#search-button');
   andThen(() => {
     ok(exists('.search-context input:checked'), 'scope to user checkbox is checked');
   });
 });
 
+test("Search with context", assert => {
+  visit("/t/internationalization-localization/280/1");
+
+  click('#search-button');
+  fillIn('#search-term', 'dev');
+  click(".search-context input[type='checkbox']");
+  keyEvent('#search-term', 'keyup', 16);
+
+  andThen(() => {
+    assert.ok(exists('.search-menu .results ul li'), 'it shows results');
+  });
+
+  visit("/");
+  click('#search-button');
+
+  andThen(() => {
+    assert.ok(!exists(".search-context input[type='checkbox']"));
+  });
+
+  visit("/t/internationalization-localization/280/1");
+  click('#search-button');
+
+  andThen(() => {
+    assert.ok(!$('.search-context input[type=checkbox]').is(":checked"));
+  });
+});

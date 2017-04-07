@@ -14,9 +14,15 @@ import { addPopupMenuOptionsCallback } from 'discourse/controllers/composer';
 import { extraConnectorClass } from 'discourse/lib/plugin-connectors';
 import { addPostSmallActionIcon } from 'discourse/widgets/post-small-action';
 import { addDiscoveryQueryParam } from 'discourse/controllers/discovery-sortable';
+import { addTagsHtmlCallback } from 'discourse/lib/render-tags';
+import { addUserMenuGlyph } from 'discourse/widgets/user-menu';
+import { addPostClassesCallback } from 'discourse/widgets/post';
+import { addPostTransformCallback } from 'discourse/widgets/post-stream';
+import { attachAdditionalPanel } from 'discourse/widgets/header';
+
 
 // If you add any methods to the API ensure you bump up this number
-const PLUGIN_API_VERSION = '0.8.1';
+const PLUGIN_API_VERSION = '0.8.6';
 
 class PluginApi {
   constructor(version, container) {
@@ -330,6 +336,26 @@ class PluginApi {
   }
 
   /**
+   * Adds a panel to the header
+   *
+   * takes a widget name, a value to toggle on, and a function which returns the attrs for the widget
+   * Example:
+   * ```javascript
+   * api.addHeaderPanel('widget-name', 'widgetVisible', function(attrs, state) {
+   *   return { name: attrs.name, description: state.description };
+   * });
+   * ```
+   * 'toggle' is an attribute on the state of the header widget,
+   *
+   * 'transformAttrs' is a function which is passed the current attrs and state of the widget,
+   * and returns a hash of values to pass to attach
+   *
+   **/
+   addHeaderPanel(name, toggle, transformAttrs) {
+     attachAdditionalPanel(name, toggle, transformAttrs);
+   }
+
+  /**
    * Adds a pluralization to the store
    *
    * Example:
@@ -386,6 +412,72 @@ class PluginApi {
    **/
   addDiscoveryQueryParam(param, options) {
     addDiscoveryQueryParam(param, options);
+  }
+
+  /**
+   * Register a callback to be called every time tags render
+   * highest priority callbacks are called first
+   * example:
+   *
+   * callback = function(topic, params) {
+   *    if (topic.get("created_at") < "2000-00-01") {
+   *      return "<span class='discourse-tag'>ANCIENT</span>"
+   *    }
+   * }
+   *
+   * api.addTagsHtmlCallback(callback, {priority: 100});
+   *
+   **/
+  addTagsHtmlCallback(callback, options) {
+    addTagsHtmlCallback(callback, options);
+  };
+
+  /**
+   * Adds a glyph to user menu after bookmarks
+   * WARNING: there is limited space there
+   *
+   * example:
+   *
+   * api.addUserMenuGlyph({
+   *    label: 'awesome.label',
+   *    className: 'my-class',
+   *    icon: 'my-icon',
+   *    href: `/some/path`
+   * });
+   *
+   */
+  addUserMenuGlyph(glyph) {
+    addUserMenuGlyph(glyph);
+  };
+
+  /**
+   * Adds a callback to be called before rendering any post that
+   * that returns custom classes to add to the post
+   *
+   * Example:
+   *
+   * addPostClassesCallback((atts) => {if (atts.post_number == 1) return ["first"];})
+   **/
+  addPostClassesCallback(callback) {
+    addPostClassesCallback(callback);
+  }
+
+  /**
+   *
+   * Adds a callback to be executed on the "transformed" post that is passed to the post
+   * widget.
+   *
+   * This allows you to apply transformations on the actual post that is about to be rendered.
+   *
+   * Example:
+   *
+   * addPostTransformCallback((t)=>{
+   *  // post number 7 is overrated, don't show it ever
+   *  if (t.post_number === 7) { t.cooked = ""; }
+   * })
+   */
+  addPostTransformCallback(callback) {
+    addPostTransformCallback(callback);
   }
 }
 

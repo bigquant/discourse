@@ -61,6 +61,8 @@
       margin-left: 0;
       margin-right: 0;
       display: table;
+      touch-action: none;
+
       .timeline-date-wrapper {
         float: right;
         text-align: right;
@@ -191,6 +193,7 @@
     margin-left: 3em;
     width: 150px;
     transition: opacity 0.2s ease-in;
+    touch-action: none;
 
     .timeline-controls {
       margin-bottom: 1em;
@@ -241,6 +244,7 @@
       background-color: dark-light-choose(scale-color($tertiary, $lightness: 80%), scale-color($tertiary, $lightness: 20%));
       height: 100%;
       float: left;
+      z-index: 501;
     }
 
     .timeline-scroller-content {
@@ -276,6 +280,7 @@
         color: $tertiary;
         margin-right: 1em;
       }
+      z-index: 502;
     }
 
     .back-button {

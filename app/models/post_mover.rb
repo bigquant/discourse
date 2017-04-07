@@ -85,14 +85,16 @@ class PostMover
   end
 
   def create_first_post(post)
-    p = PostCreator.create(
+    new_post = PostCreator.create(
       post.user,
       raw: post.raw,
       topic_id: destination_topic.id,
       acting_user: user,
       skip_validations: true
     )
-    p.update_column(:reply_count, @reply_count[1] || 0)
+
+    PostAction.copy(post, new_post)
+    new_post.update_column(:reply_count, @reply_count[1] || 0)
   end
 
   def move(post)
@@ -157,7 +159,7 @@ class PostMover
 
   def posts
     @posts ||= begin
-      Post.where(id: post_ids).order(:created_at).tap do |posts|
+      Post.where(topic: @original_topic, id: post_ids).order(:created_at).tap do |posts|
         raise Discourse::InvalidParameters.new(:post_ids) if posts.empty?
       end
     end

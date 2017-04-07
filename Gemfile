@@ -92,7 +92,7 @@ gem 'pry-rails', require: false
 gem 'r2', '~> 0.2.5', require: false
 gem 'rake'
 
-
+gem 'thor', require: false
 gem 'rest-client'
 gem 'rinku'
 gem 'sanitize'
@@ -120,6 +120,8 @@ group :test do
   gem 'fakeweb', '~> 1.3.0', require: false
   gem 'minitest', require: false
   gem 'timecop'
+  # TODO: Remove once we upgrade to Rails 5.
+  gem 'test_after_commit'
 end
 
 group :test, :development do
